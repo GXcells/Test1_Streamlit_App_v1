@@ -1,6 +1,7 @@
 import streamlit as st
 
 from st_audiorec import st_audiorec
+#good audio recorder
 st.set_page_config(page_title="Page 1", page_icon="🌍")
 
 
