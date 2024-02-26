@@ -43,10 +43,11 @@ if submit:
         #if ((vect_size !=None and vect_size>0 ) and (vect_amt!=None and vect_amt>0) & (insert_size !=None and insert_size>0 )):
             #submit_toast=st.toast("Calculation done")
   #use ast.literal_eval to convert 1:3 to an operation+
+        
 def change_molarity():
     if mola_val.metric != None:
         try:
-            mola_val.metric(label="",value=round((int(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(int(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(int(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]),5), label_visibility="hidden")
+            mola_val.metric(label="Molarity Result",value=round((int(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(int(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(int(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]),5), label_visibility="hidden")
         except:
             error_message.error("Please fill all required fields", icon="🚨")
     else:
