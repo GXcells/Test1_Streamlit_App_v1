@@ -1,3 +1,2 @@
-streamlit-audiorecorder
 ffmpeg
 streamlit-audiorec

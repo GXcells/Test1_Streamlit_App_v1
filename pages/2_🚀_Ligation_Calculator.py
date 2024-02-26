@@ -1,6 +1,7 @@
 import streamlit as st
 import time
-st.set_page_config(page_title="Page 2", page_icon="🚀")
+
+st.set_page_config(page_title="Ligation calculator", page_icon="🚀")
 
 st.title("Ligation Calculator")
 with st.form(key='ligation_calculator'):
@@ -21,4 +22,4 @@ with st.form(key='ligation_calculator'):
             error_message=container.error("Please fill all required fields", icon="🚨")
 
 
-  #use ast.literal_eval to convert 1:3 to an operation
+  #use ast.literal_eval to convert 1:3 to an operation+
