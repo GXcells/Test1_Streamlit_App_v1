@@ -16,9 +16,9 @@ dict_unit={
 
 
 #   ~ define all my session_states
-if "k_mol_sel" not in st.session_state:
+if "k_mol_sel" not in st.session_state:#k_mol_sel is the key for the molarity concentration unit selector
     st.session_state["k_mol_sel"]="M"
-if "molarity_result" not in st.session_state:
+if "molarity_result" not in st.session_state:#we create "molarity result" session_state variable to store the result
     st.session_state["molarity_result"]=""
 
 #   ~ MAIN CONTAINER OF MOLARITY CALCULATOR
@@ -27,66 +27,70 @@ mola_container=st.container(border=True)
 #   ~ Container for the MOLECULAR WEIGHT part
 container_da = mola_container.container(border=True)
 dacol1,dacol2 = container_da.columns(2)
-molec_da_inp = dacol1.number_input("Molecular weight",value=None, format="%.2f",step=0.01,placeholder="Enter molecular weight")
-molec_da_sel = dacol2.selectbox("unit", options=["Daltons (g/mol)","kDa"],key="k_molec_unit")
+mo_da_in = dacol1.number_input("Molecular weight",value=None, format="%.2f",step=0.01,placeholder="Enter molecular weight")
+mo_da_se = dacol2.selectbox("unit", options=["Daltons (g/mol)","kDa"],key="k_molec_unit")
 #st.divider()
 
 #   ~ Container for the mass volume and result
-form_molarity=mola_container.container(border=False)
-mo_res_title= mola_container.text("Concentration")
+form_molarity=mola_container.container(border=True)
 
-#   ~ empty placeholder for the Result of calculation
-mola_val=mola_container.empty()#I make empty container because I have multiple time callign of the calculation and otherwise it was creating multiple time the result widget
-#       ~ Populate the empty placeholder with value from session_state of a global variable
-mola_val.text(st.session_state["molarity_result"])
+
+
 
 #   ~ empty placeholder for error message
-error_message=mola_container.empty()#i create an empty container to avoid duplication of the error message in my "try" functions
+error_message=form_molarity.empty()#i create an empty container to avoid duplication of the error message in my "try" functions
 
 
 #   ~ elements for user input( weight and volume)
 with form_molarity:
     
     mocol1,mocol2,mocol3,mocol4,mocol5 = st.columns(5)
-    mo_weight_inp= mocol1.text_input("Weight input", "",placeholder="Enter number")
-    mo_weight_sel= mocol2.selectbox("Weight unit",options=["g","mg","µg","ng","pg"],index=2)
+    mo_w_in= mocol1.text_input("Weight input", "",placeholder="Enter number")
+    mo_w_se= mocol2.selectbox("Weight unit",options=["g","mg","µg","ng","pg"],index=2)
 
     mo_weight_sep= mocol3.text("--    in   --")
 
-    mo_vol_inp= mocol4.text_input("volume input", "",placeholder="Enter number")
-    mo_vol_sel= mocol5.selectbox("volume unit",options=["L","mL","µL"],index=1)
+    mo_v_in= mocol4.text_input("volume input", "",placeholder="Enter number")
+    mo_v_se= mocol5.selectbox("volume unit",options=["L","mL","µL"],index=1)
 
     mo_res_emptyxol= mocol3.text(" ")
     mo_res_emptyxol= mocol3.text(" ")
     mo_res_emptyxol= mocol3.text(" ")
     mo_res_emptyxol= mocol3.text(" ")
     submit = st.button('Calculate Molarity')
+    
+#   ~ empty placeholder for the Result of calculation
+mo_res_title= form_molarity.text("Concentration")
+mola_val=form_molarity.empty()#I make empty container because I have multiple time callign of the calculation and otherwise it was creating multiple time the result widget
+#       ~ Populate the empty placeholder with value from session_state of a global variable
+mola_val.text(st.session_state["molarity_result"])
 
+#   ~ Main function for calculating the molarity
 def calc_molarity():
-    tmp_mass=float(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]
-    tmp_MW=float(molec_da_inp)*dict_unit["MW"][molec_da_sel]
-    tmp_vol=float(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]
+    tmp_mass=float(mo_w_in)*dict_unit["mass"][mo_w_se]
+    tmp_MW=float(mo_da_in)*dict_unit["MW"][mo_da_se]
+    tmp_vol=float(mo_v_in)*dict_unit["vol"][mo_v_se]
     tmp_M_unit=float(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])
 
-    st.session_state["molarity_result"]=str(round((tmp_mass)/(tmp_MW)/(tmp_vol)*(tmp_M_unit),5))      
-
+    #st.session_state["molarity_result"]=f'{round((tmp_mass)/(tmp_MW)/(tmp_vol)*(tmp_M_unit),5):.6f}'#this is to format the number to  6  decimal and remove scientific notation when it appears
+    st.session_state["molarity_result"]=f'{round((tmp_mass)/(tmp_MW)/(tmp_vol)*(tmp_M_unit),5)}'    
+ 
+#   ~ Callback from the "calculate Molarity" button when pushed
 if submit:
     try:
         calc_molarity()
         mola_val.text(st.session_state["molarity_result"])
-        #mola_val.text(str(round(((int(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(int(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(int(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
+        #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
     except Exception as error:
         error_message.error("Please fill all required fields with a number", icon="🚨")
         print("An exception occurred 1:", error)
         st.session_state["molarity_result"]=""
         mola_val.text(st.session_state["molarity_result"])
-        #if ((vect_size !=None and vect_size>0 ) and (vect_amt!=None and vect_amt>0) & (insert_size !=None and insert_size>0 )):
-            #submit_toast=st.toast("Calculation done")
-  #use ast.literal_eval to convert 1:3 to an operation+
-        
+
+#   ~ Function callback fro mthe concentration unit selector box      
 def change_molarity():#Need to modify it so that it uses only session.state in order to be able to put bac k the functio nat the beginning of the script
     try:
-        if  (st.session_state["molarity_result"]=="") or (molec_da_inp==None) or (mo_weight_inp==None) or (mo_weight_inp=="") or (mo_vol_sel==None) or (mo_vol_sel=="") :
+        if  (st.session_state["molarity_result"]=="") or (mo_da_in==None) or (mo_w_in==None) or (mo_w_in=="") or (mo_v_se==None) or (mo_v_se=="") :
             print("Nothing to change")
             st.session_state["molarity_result"]=""
             mola_val.text(st.session_state["molarity_result"])
@@ -94,7 +98,6 @@ def change_molarity():#Need to modify it so that it uses only session.state in o
         
             print(st.session_state["k_mol_sel"])
             print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
-            #st.session_state["molarity_result"]=(str(round(((float(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(float(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(float(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]))*(float(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])),5)))
             calc_molarity()
             mola_val.text(st.session_state["molarity_result"])
     except Exception as error:
@@ -102,7 +105,7 @@ def change_molarity():#Need to modify it so that it uses only session.state in o
 
     
 
-mo_res_sel= mola_container.selectbox("concentration unit",options=["M","mM","µM","nM","pM"],index=0, key="k_mol_sel", on_change=change_molarity())
+mo_res_sel= form_molarity.selectbox("concentration unit",options=["M","mM","µM","nM","pM"],index=0, key="k_mol_sel", on_change=change_molarity())
 
 
 
