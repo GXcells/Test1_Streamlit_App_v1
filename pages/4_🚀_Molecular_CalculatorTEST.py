@@ -1,3 +1,6 @@
+############
+#############  I HAVE TO MODIFY CALCULATION SO THAT IT USES FLOAT INSTEAD OF INTEGERS OTHERWISE I CANNOT INPUT A VOLUME OR WEIGHT WITH A DECIMAL
+
 import streamlit as st
 import time
 
@@ -60,10 +63,10 @@ with form_molarity:
     submit = st.button('Calculate Molarity')
 
 def calc_molarity():
-    tmp_mass=int(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]
-    tmp_MW=int(molec_da_inp)*dict_unit["MW"][molec_da_sel]
-    tmp_vol=int(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]
-    tmp_M_unit=int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])
+    tmp_mass=float(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]
+    tmp_MW=float(molec_da_inp)*dict_unit["MW"][molec_da_sel]
+    tmp_vol=float(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]
+    tmp_M_unit=float(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])
 
     st.session_state["molarity_result"]=str(round((tmp_mass)/(tmp_MW)/(tmp_vol)*(tmp_M_unit),5))      
 
@@ -85,11 +88,14 @@ def change_molarity():#Need to modify it so that it uses only session.state in o
     try:
         if  (st.session_state["molarity_result"]=="") or (molec_da_inp==None) or (mo_weight_inp==None) or (mo_weight_inp=="") or (mo_vol_sel==None) or (mo_vol_sel=="") :
             print("Nothing to change")
+            st.session_state["molarity_result"]=""
+            mola_val.text(st.session_state["molarity_result"])
         else:
         
             print(st.session_state["k_mol_sel"])
             print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
-            st.session_state["molarity_result"]=(str(round(((int(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(int(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(int(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]))*(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])),5)))
+            #st.session_state["molarity_result"]=(str(round(((float(mo_weight_inp)*dict_unit["mass"][mo_weight_sel]/(float(molec_da_inp)*dict_unit["MW"][molec_da_sel]))/(float(mo_vol_inp)*dict_unit["vol"][mo_vol_sel]))*(float(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]])),5)))
+            calc_molarity()
             mola_val.text(st.session_state["molarity_result"])
     except Exception as error:
         print("An exception occurred:", error)
