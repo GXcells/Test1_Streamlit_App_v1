@@ -1,13 +1,15 @@
 ############
 #############  I HAVE TO MODIFY CALCULATION SO THAT IT USES FLOAT INSTEAD OF INTEGERS OTHERWISE I CANNOT INPUT A VOLUME OR WEIGHT WITH A DECIMAL
 
+
+#Everything update each time yo uchange unit for example because I don't use st.form widget
 import streamlit as st
 import time
 
-st.set_page_config(page_title="Molecular CalculatorTEST", page_icon="🚀")
-st.title("Molecular calculator")
+st.set_page_config(page_title="Molecular tools", page_icon="🚀")
+st.title("Molecular tools")
 
-#   ~dictionnary to hold data for calculation
+#   ~ dictionnary to hold data for calculation
 dict_unit={
     "MW":{"Daltons (g/mol)":1,"kDa":1000},
     "mass":{"g":1,"mg":10**-3,"µg":10**-6,"ng":10**-9,"pg":10**-12},
@@ -16,14 +18,18 @@ dict_unit={
 
 
 #   ~ define all my session_states
+#      ~ for the molarity calculator
 if "k_mol_sel" not in st.session_state:#k_mol_sel is the key for the molarity concentration unit selector
     st.session_state["k_mol_sel"]="M"
 if "molarity_result" not in st.session_state:#we create "molarity result" session_state variable to store the result
     st.session_state["molarity_result"]=""
-if "k_volres_sel" not in st.session_state:#k_volres_sel is the key for the volume unit selector
+#      ~ for the volume calculator
+if "k_volres_sel" not in st.session_state:#k_volres_sel is the key for the volume unit selector i nthe Volume calculator
     st.session_state["k_volres_sel"]="mL"
 if "volume_result" not in st.session_state:
     st.session_state["volume_result"]=""
+
+
 #   ~ MAIN CONTAINER OF MOLARITY CALCULATOR
 mola_container=st.container(border=True)
 
@@ -34,8 +40,14 @@ mo_da_in = dacol1.number_input("Molecular weight",value=None, format="%.2f",step
 mo_da_se = dacol2.selectbox("unit", options=["Daltons (g/mol)","kDa"],key="k_molec_unit")
 #st.divider()
 
+#   ~ Title for molarity calculator
+
+mola_container.header("Calculate molarity of a solution")
+
+
 #   ~ Container for the mass volume and result
 form_molarity=mola_container.container(border=True)
+
 
 
 #   ~ empty placeholder for error message
@@ -114,6 +126,9 @@ mo_res_sel= form_molarity.selectbox("concentration unit",options=["M","mM","µM"
 ################################################
 ###############################################
 
+#   ~Title for the volume calculator
+mola_container.header("Calculate volume required")
+
 
 #   ~ Container for the mass volume and result
 form_volume=mola_container.container(border=True)
@@ -176,18 +191,18 @@ if submitvol:
 #   ~ Function callback fro mthe concentration unit selector box      
 def change_volume():#Need to modify it so that it uses only session.state in order to be able to put bac k the functio nat the beginning of the script
     try:
-        if  (st.session_state["molarity_result"]=="") or (mo_da_in==None) or (mo_w_in==None) or (mo_w_in=="") or (mo_v_se==None) or (mo_v_se=="") :
-            print("Nothing to change")
-            st.session_state["molarity_result"]=""
-            mola_val.text(st.session_state["molarity_result"])
+        if  (st.session_state["volume_result"]=="") or (mo_da_in==None) or (vo_w_in==None) or (vo_w_in=="") or (vo_c_in==None) or (vo_c_in=="") :
+            print("Nothing to change_changevolume")
+            st.session_state["volume_result"]=""
+            vol_val.text(st.session_state["volume_result"])
         else:
         
-            print(st.session_state["k_mol_sel"])
-            print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
-            calc_molarity()
-            mola_val.text(st.session_state["molarity_result"])
+            print(st.session_state["k_volres_sel"])
+            print(int(dict_unit["vol"][st.session_state["k_volres_sel"]]))
+            calc_volume()
+            vol_val.text(st.session_state["volume_result"])
     except Exception as error:
-        print("An exception occurred:", error)
+        print("An exception occurred in change_volume:", error)
 
     
 
