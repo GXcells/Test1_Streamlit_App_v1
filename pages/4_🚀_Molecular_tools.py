@@ -108,11 +108,11 @@ def change_molarity():#Need to modify it so that it uses only session.state in o
             st.session_state["molarity_result"]=""
             mola_val.text(st.session_state["molarity_result"])
         else:
-        
-            print(st.session_state["k_mol_sel"])
-            print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
-            calc_molarity()
-            mola_val.text(st.session_state["molarity_result"])
+            with wait_spinner, st.spinner("Please wait"):
+                print(st.session_state["k_mol_sel"])
+                print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
+                calc_molarity()
+                mola_val.text(st.session_state["molarity_result"])
     except Exception as error:
         print("An exception occurred:", error)
 
