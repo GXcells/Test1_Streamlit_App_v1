@@ -2,7 +2,7 @@
 #Everything update each time you change unit for example because I don't use st.form widget
 import streamlit as st
 import time
-
+import json
 st.set_page_config(page_title="Molecular tools", page_icon="🚀")
 st.title("Molecular tools")
 
@@ -88,8 +88,9 @@ def calc_molarity():
 #   ~ Callback from the "calculate Molarity" button when pushed
 if submit:
     try:
-        with wait_spinner, st.spinner("Please wait"):
-                        
+        with st.spinner("Please wait"):
+            
+            
             calc_molarity()
         mola_val.text(st.session_state["molarity_result"])
         
@@ -179,10 +180,9 @@ def calc_volume():
 #   ~ Callback from the "calculate Molarity" button when pushed
 if submitvol:
     try:
-        with wait_spinner, st.spinner("Please wait"):
-            calc_volume()
-            vol_val.text(st.session_state["volume_result"])
-            #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
+        calc_volume()
+        vol_val.text(st.session_state["volume_result"])
+        #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
     except Exception as error:
         error_messagevol.error("Please fill all required fields with a number", icon="🚨")
         print("An exception occurred 1:", error)
