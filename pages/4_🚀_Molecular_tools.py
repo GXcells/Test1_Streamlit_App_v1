@@ -88,9 +88,8 @@ def calc_molarity():
 #   ~ Callback from the "calculate Molarity" button when pushed
 if submit:
     try:
-        with wait_spinner, st.spinner("Please wait"):
-                        
-            calc_molarity()
+               
+        calc_molarity()
         mola_val.text(st.session_state["molarity_result"])
         
         #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
@@ -108,11 +107,11 @@ def change_molarity():#Need to modify it so that it uses only session.state in o
             st.session_state["molarity_result"]=""
             mola_val.text(st.session_state["molarity_result"])
         else:
-            with wait_spinner, st.spinner("Please wait"):
-                print(st.session_state["k_mol_sel"])
-                print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
-                calc_molarity()
-                mola_val.text(st.session_state["molarity_result"])
+
+            print(st.session_state["k_mol_sel"])
+            print(int(dict_unit["molarity_unit"][st.session_state["k_mol_sel"]]))
+            calc_molarity()
+            mola_val.text(st.session_state["molarity_result"])
     except Exception as error:
         print("An exception occurred:", error)
 
@@ -179,10 +178,10 @@ def calc_volume():
 #   ~ Callback from the "calculate Molarity" button when pushed
 if submitvol:
     try:
-        with wait_spinner, st.spinner("Please wait"):
-            calc_volume()
-            vol_val.text(st.session_state["volume_result"])
-            #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
+
+        calc_volume()
+        vol_val.text(st.session_state["volume_result"])
+        #mola_val.text(str(round(((int(mo_w_in)*dict_unit["mass"][mo_w_se]/(int(mo_da_in)*dict_unit["MW"][mo_da_se]))/(int(mo_v_in)*dict_unit["vol"][mo_v_se]))*(int(dict_unit["molarity_unit"][mo_res_sel])),5)))
     except Exception as error:
         error_messagevol.error("Please fill all required fields with a number", icon="🚨")
         print("An exception occurred 1:", error)
